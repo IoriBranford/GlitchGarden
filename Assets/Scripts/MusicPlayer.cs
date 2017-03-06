@@ -4,39 +4,29 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class MusicPlayer : MonoBehaviour {
-	static MusicPlayer _instance;
-
-	public AudioClip startMusic;
-	public AudioClip stageMusic;
-
-	private AudioSource _music;
+	public AudioClip[] sceneSongs;
 
 	void Awake () {
-		if (_instance == null) {
-			GameObject.DontDestroyOnLoad(gameObject);
-			_instance = this;
-			SceneManager.sceneLoaded += OnLoadedScene;
-			_music = GetComponent<AudioSource>();
-		} else if (_instance != this) {
-			Destroy(gameObject);
-		}
+		DontDestroyOnLoad(gameObject);
+		SceneManager.sceneLoaded += OnLoadedScene;
 	}
 
 	// Between Awake and Start is when an audio source starts playing
 
 	void OnLoadedScene (Scene scene, LoadSceneMode mode) {
-		_music.Stop();
-		switch (scene.name) {
-		case "Start":
-			_music.clip = startMusic;
-			break;
-		case "Stage":
-			_music.clip = stageMusic;
-			break;
-		default:
-			return;
+		AudioSource musicSource = GetComponent<AudioSource>();
+
+		AudioClip nextSong = sceneSongs[scene.buildIndex];
+		if (nextSong) {
+			if (nextSong != musicSource.clip) {
+				musicSource.Stop();
+				musicSource.clip = nextSong;
+				musicSource.loop = (scene.buildIndex != 0);
+				musicSource.Play();
+			}
+		} else {
+			musicSource.Stop();
 		}
-		_music.loop = true;
-		_music.Play();
 	}
+
 }
