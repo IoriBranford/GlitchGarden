@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour {
+	public float autoAdvanceTime = 0;
+
 	void Awake () {
 		SceneManager.sceneLoaded += SceneLoaded;
 	}
@@ -29,7 +31,7 @@ public class LevelManager : MonoBehaviour {
 	void SceneLoaded (Scene scene, LoadSceneMode mode) {
 		switch (scene.name) {
 		case "00_Splash":
-			Invoke("LoadNextLevel", 3);
+			Invoke("LoadNextLevel", autoAdvanceTime);
 			break;
 		}
 	}
