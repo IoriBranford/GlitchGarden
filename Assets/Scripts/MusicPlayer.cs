@@ -6,16 +6,17 @@ using UnityEngine.SceneManagement;
 public class MusicPlayer : MonoBehaviour {
 	public AudioClip[] sceneSongs;
 
+	private AudioSource musicSource;
+
 	void Awake () {
 		DontDestroyOnLoad(gameObject);
 		SceneManager.sceneLoaded += OnLoadedScene;
+		musicSource = GetComponent<AudioSource>();
 	}
 
 	// Between Awake and Start is when an audio source starts playing
 
 	void OnLoadedScene (Scene scene, LoadSceneMode mode) {
-		AudioSource musicSource = GetComponent<AudioSource>();
-
 		AudioClip nextSong = sceneSongs[scene.buildIndex];
 		if (nextSong) {
 			if (nextSong != musicSource.clip) {
@@ -29,4 +30,7 @@ public class MusicPlayer : MonoBehaviour {
 		}
 	}
 
+	public void SetVolume (float volume) {
+		musicSource.volume = volume;
+	}
 }

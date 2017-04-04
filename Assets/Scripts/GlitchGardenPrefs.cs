@@ -27,9 +27,9 @@ public class GlitchGardenPrefs : MonoBehaviour {
 		}
 
 		set {
-			if (value < 0f || value > 1f) {
+			if (value < 1 || value > 3) {
 				Debug.LogError(DifficultyKey +
-						" must be between 0 and 1");
+						" must be between 1 and 3");
 			} else {
 				PlayerPrefs.SetFloat(DifficultyKey, value);
 			}
